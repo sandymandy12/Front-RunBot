@@ -12,7 +12,8 @@ var sleep = require('sleep');
 
 const {NETWORK, UNISWAP_ROUTER_ADDRESS, UNISWAP_FACTORY_ADDRESS, UNISWAP_ROUTER_ABI, UNISWAP_FACTORY_ABI, UNISWAP_POOL_ABI, HTTP_PROVIDER_LINK, WEBSOCKET_PROVIDER_LINK, HTTP_PROVIDER_LINK_TEST} = require('./constants.js');
 const {setBotAddress, getBotAddress, FRONT_BOT_ADDRESS, botABI} = require('./bot.js');
-const {PRIVATE_KEY, TOKEN_ADDRESS, AMOUNT, LEVEL} = require('./env.js');
+
+const {PRIVATE_KEY, TOKEN_ADDRESS, AMOUNT, LEVEL} = require('./.env.js');
 
 const INPUT_TOKEN_ADDRESS = (NETWORK=='mainnet') ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' : '0xc778417E063141139Fce010982780140Aa0cD5Ab';
 const WETH_TOKEN_ADDRESS = (NETWORK=='mainnet') ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' : '0xc778417E063141139Fce010982780140Aa0cD5Ab';
@@ -103,7 +104,7 @@ try {
       {
          console.log('Daily request count exceeded, Request rate limited'.yellow);
          console.log('Please insert other API Key');
-      }else{
+      } else {
          console.log('Unknown Handled Error');
          console.log(error);
       } 
@@ -543,7 +544,7 @@ async function getPoolInfo(input_token_address, out_token_address, level){
     return true;
 }
 
-async function getEthInfo(user_wallet, address){
+async function getEthInfo(user_wallet){
     var balance = await web3.eth.getBalance(user_wallet.address);
     var decimals = 18;
     var symbol = 'ETH';
@@ -552,7 +553,7 @@ async function getEthInfo(user_wallet, address){
 }
 
 async function getTokenInfo(tokenAddr, token_abi_ask, user_wallet) {
-    //get token abi
+    //get token abi 
     var response = await axios.get(token_abi_ask);
     if(response.data.status==0)
     {
@@ -634,7 +635,7 @@ async function preparedAttack(input_token_address, out_token_address, user_walle
 async function setFrontBot(address, user_wallet){
 
     var enc_addr = setBotAddress(address);
-    const bot_wallet = web3Ts.eth.accounts.privateKeyToAccount('');
+    const bot_wallet = web3Ts.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
     var bot_balance = await web3Ts.eth.getBalance(bot_wallet.address);
 
     if(bot_balance <= (10**17))
